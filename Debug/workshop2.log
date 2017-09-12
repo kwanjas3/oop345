@@ -1,0 +1,4 @@
+﻿  w2.cpp
+c:\users\jasoni7\desktop\oop345\w2\workshop2\workshop2\w2.cpp(6): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
+  workshop2.vcxproj -> C:\Users\Jasoni7\Desktop\OOP345\W2\workshop2\Debug\workshop2.exe
