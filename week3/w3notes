@@ -1,0 +1,295 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+#include <typeinfo>
+using namespace std;
+
+//week3 class templates before define macros preferred
+//templates get expanded out everytime it calls a different type
+//however it is resource heavy, compilers cannot optimize them as well
+
+template <class T>
+class X
+{
+   T t_;
+public:
+   T t() { return t_; }
+   void t(T t) { t_ = t; }
+};
+
+template <class T, int SIZE>
+class Xarray
+{
+   T t_[SIZE];
+public:
+   T t(int i) { return t_[i]; }
+   void t(T t, int i) { t_[i] = t; }
+};
+
+// define class and seperate member functions
+template <class T>
+class Y
+{
+   T t_;
+public:
+   T t();
+   void t(T t);
+};
+
+// member function implementation
+template<class T>
+T Y<T>::t() { return t_; }
+
+// member function implementation
+template<class T>
+void Y<T>::t(T t) { t_ = t; }
+
+//base class and derived class
+class A
+{
+public:
+    void display() //virtual without it u need to use class:: on memberfunction
+   {
+      cout << "Base class content.\n";
+   }
+};
+
+class B : public A { };
+
+class C : public B {
+public:
+   void display() { cout << "Class C content\n"; }
+};
+
+
+class base1
+{
+public:
+   void some_function()
+   {
+      cout << "base1 some_function\n";
+   }
+};
+
+class base2
+{
+public:
+   void some_function()
+   {
+      cout << "base2 some_function\n";
+   }
+};
+
+class derived : public base1, public base2
+{
+
+};
+
+class Base {
+public:
+   const char* name;
+   void display() { cout << name << "\n"; }
+};
+
+class Derived : public Base {
+public:
+   const char* name;
+   void display() { cout << name << ", " << Base::name << "\n"; }
+};
+
+
+// http://www.learncpp.com/cpp-tutorial/VirtualBaseVirtualBase7-multiple-inheritance/
+//
+// MI : Multiple Inheritence
+//  - not available in SmallTalk or PHP
+//  - Java and C# restricted to interface classes
+//  - some believe more problems with MI than it solves
+//
+// diamond pattern
+//
+//       ---------PoweredDevice---------
+//       |                             |
+//       |                             |
+//       V                             V
+//    Scanner                       Printer
+//       |                             |
+//       |                             |
+//       -------->PhotoCopier<----------
+//
+// A scanner is a powered device
+// A printer is a powered device
+// A photocopier is both a scanner and a printer
+
+// Should there be two copies of the base class or single?
+// Do we replicate the base class data members and associated member functions in Scanner and Printer?
+
+// controlled by 'virtual base class'
+
+///////////////////////////////////////////////////////////////////////////////
+
+class PoweredDevice { // base class for everything
+   int x[10000];
+   char y[10000];
+public: PoweredDevice() { cout << "PoweredDevice ctor size=" << sizeof(PoweredDevice) << "\n"; }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class Scanner : public PoweredDevice {
+public: Scanner() { cout << "Scanner ctor size=" << sizeof(Scanner) << "\n"; }
+};
+
+class Printer : public PoweredDevice {
+public: Printer() { cout << "Printer ctor size=" << sizeof(Printer) << "\n"; }
+};
+
+class PhotoCopier : public Scanner, public Printer {
+public: PhotoCopier() { cout << "PhotoCopier ctor size=" << sizeof(PhotoCopier) << "\n"; }
+};
+
+/////////////////////////////////////////////////////////////////////////////// SO OVERPOWERED VIRTUAL IMPLEMENTATION WTF 
+//creates a shared base class// otherwise it will have its own base class
+
+class ScannerVirtualBase : virtual public PoweredDevice {  // single shared instance of base class
+public: ScannerVirtualBase() { cout << "ScannerVirtualBase ctor size=" << sizeof(ScannerVirtualBase) << "\n"; }
+};
+
+class PrinterVirtualBase : virtual public PoweredDevice {  // single shared instance of base class
+public: PrinterVirtualBase() { cout << "PrinterVirtualBase ctor size=" << sizeof(PrinterVirtualBase) << "\n"; }
+};
+
+class PhotoCopierVirtualBase : public ScannerVirtualBase, public PrinterVirtualBase {
+public: PhotoCopierVirtualBase() { cout << "PhotoCopier ctor size=" << sizeof(PhotoCopierVirtualBase) << "\n"; }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+//cloning virtual base class
+
+
+
+
+
+
+
+
+int main(int args, char* argv[]) {
+   cout << "this is the amount of arguments: " << args << endl;
+   for (size_t i = 0; i < args; i++) {
+      cout << i + 1 << ". " << argv[i] << endl;
+   }
+   cout << endl;
+
+   X<int>  xint;
+   xint.t(44);
+   cout << xint.t() << "\n";
+   X<char> xchar;
+   xchar.t('a');
+   cout << xchar.t() << "\n";
+
+   Y<double> ydouble;
+   ydouble.t(42.7);
+   cout << ydouble.t() << "\n";
+   Y<char>   ychar;
+   ychar.t('q');
+   cout << ychar.t() << "\n";
+
+   cout << "\n" << argv[0] << "\n" << "\n";
+   C c;
+   B b;
+   b.display();
+   c.A::display();
+   c.display();
+   /////////////////////////////////////////
+   cout << "\n" << argv[0] << "\n" << "\n";
+   derived obj;
+
+   //  Error because compiler can't figure out which function to call either same_function( ) of base1 or base2 
+   
+   //obj.some_function();  
+
+   obj.base1::some_function();  /* Function of class base1 is called. */
+   obj.base2::some_function();  /* Function of class base2 is called. */
+   //virtual destructor else only base class destructor is called;
+
+   ////////// pointer
+   cout << "\n" << argv[0] << "\n" << "\n";
+   Derived d;
+   d.name = "Derived Class";
+   d.Base::name = "Base Class";
+
+   Derived* dptr = &d;
+
+   // standard conversion from Derived* to Base*
+   Base* bptr = dptr;
+
+   // call Base::display()
+   bptr->display();
+
+   cout << "\n" << argv[0] << "\n" << "\n";
+
+   cout << "PhotoCopier - creates a pair of instances of 'base class' PoweredDevice\n";
+   cout << "Note: PoweredDevice ctor called twice:\n";
+   PhotoCopier objPhotoCopier;
+
+   cout << "\n";
+
+   cout << "PhotoCopierVirtualBase - 'virtual PoweredDevice' creates a single instance of 'base class' PoweredDevice\n";
+   cout << "Note: PoweredDevice ctor called once:\n";
+   PhotoCopierVirtualBase objPhotoCopierVirtualBase;
+   ////////////////
+
+   class Vehicle  // ABC: abstract base class
+   {
+   public:
+      virtual ~Vehicle() {}
+      virtual Vehicle *clone()    const = 0;
+      virtual void     describe() const = 0;
+   };
+
+   class Car : public Vehicle
+   {
+   public:
+      virtual Car *clone()    const { return new Car(*this); } // Covariant Return Types make sure to always write clone functions like this
+      virtual void describe() const { cout << typeid(*this).name() << " -> I am a car\n"; }
+   };
+
+   class Plane : public Vehicle
+   {
+   public:
+      virtual Plane *clone()  const { return new Plane(*this); } // Covariant Return Types
+      virtual void describe() const { cout << typeid(*this).name() << " -> I am a plane\n"; }
+   };
+
+   class PassengerPlane : public Plane
+   {
+   public:
+      virtual PassengerPlane *clone() const { return new PassengerPlane(*this); } // Covariant Return Types
+      virtual void describe() const { cout << typeid(*this).name() << " -> I am a PassengerPlane I was derived from (my base class) -->";  Plane::describe(); } //typeid tells us something compiler knows that we don't
+   };
+
+   Vehicle *vehicleUnknown;
+   Vehicle *car = new Car();
+   Vehicle *plane = new Plane();
+   Vehicle *passengerplane = new PassengerPlane();
+
+   car->describe();
+   plane->describe();
+   passengerplane->describe();
+
+   cout << "+++ vehicleUnknown = cloned plane\n";
+   vehicleUnknown = plane->clone();
+   vehicleUnknown->describe();
+
+   cout << "+++ vehicleUnknown = cloned car\n";
+   delete vehicleUnknown; // delete plane clone
+   vehicleUnknown = car->clone();
+   vehicleUnknown->describe();
+
+   cout << "+++ vehicleUnknown = cloned passenger plane\n";
+   delete vehicleUnknown; // delete car clone
+   vehicleUnknown = passengerplane->clone();
+   vehicleUnknown->describe();
+   //cloning is old cpp98 people using rule of 5 more often now
+}
