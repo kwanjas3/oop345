@@ -52,3 +52,5 @@ static int count; // class var
 int count; // instance variable
 }
 int x = count += 1; <- will keep track of how many classes are active, you can subtract count in destructor to decrease
+
+//iterators
