@@ -12,8 +12,25 @@ public:
   C(const C& o) : s(o.s), b((T*) memcpy(new T[s], o.b, s*sizeof(T))) {}
   
   
-  C& operator = (C& rhs){}
-  C&& operator = (C&& rhs){}
-
+  C& operator = (C& rhs){
+  if (this != &rhs){
+    delete [] b;
+    s = rhs.s;
+    if (rhs.b != nullptr){ 
+      b = new C[s];
+      memcpy(rhs.b, s*sizeof(T));
+    }
+  }
+  return *this;
+  }
+  C&& operator = (C&& rhs){
+  if (this != &rhs){
+    delete [] b;
+    s = rhs.s;
+    b = rhs.b;
+    rhs.s = 0;
+    rhs.b = nullptr;
+  }
+ return move(*this);
 }
 
