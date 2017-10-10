@@ -34,3 +34,21 @@ public:
  return move(*this);
 }
 
+static keyword usage;
+1. static int x; <- valid only within filescope.
+2. inside a function, static int x  = 0, remembers x when u come back into scope, basically function closure from JS
+
+function count(){
+int x = 0;
+return function (){
+   x++;
+  return count();
+}
+}
+
+3. inside a class as a class variable
+class ex {
+static int count; // class var
+int count; // instance variable
+}
+int x = count += 1; <- will keep track of how many classes are active, you can subtract count in destructor to decrease
