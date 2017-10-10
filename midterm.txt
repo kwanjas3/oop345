@@ -1,0 +1,19 @@
+know how to do templated rule of 5
+
+template<typename T>
+class C{
+
+size_t s = 0;
+T* b = nullptr;
+
+public:
+  ~C() {delete[] b;}
+  C(size_t ss = 0) : s(ss), b(new T[ss]) {}
+  C(const C& o) : s(o.s), b((T*) memcpy(new T[s], o.b, s*sizeof(T))) {}
+  
+  
+  C& operator = (C& rhs){}
+  C&& operator = (C&& rhs){}
+
+}
+
