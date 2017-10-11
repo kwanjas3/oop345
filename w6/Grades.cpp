@@ -29,3 +29,7 @@ Grades::Grades(const char * filename)
    fp.close();
 
 }
+
+Grades::~Grades(){
+ delete[] grade;
+}
