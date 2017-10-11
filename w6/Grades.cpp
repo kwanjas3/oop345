@@ -3,9 +3,11 @@
 using namespace std;
 Grades::Grades(const char * filename)
 {
+   try {
    std::string line;
    ifstream fp;
    fp.open(filename);
+   if (!fp) throw exception("could not open file: ");
    //get size of file
 
    if (fp.is_open()) {
@@ -27,7 +29,7 @@ Grades::Grades(const char * filename)
       cout << i << endl;
    }
    fp.close();
-
+   } catch(const exception& err){ cerr << err.what() << " " << filename << endl; }
 }
 
 Grades::~Grades(){
