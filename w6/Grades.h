@@ -12,6 +12,7 @@ private:
    size_t s = 0;
 public:
    Grades(const char* filename);
+   ~Grades();
    template <typename exp>
    void displayGrades(ostream &os, exp func) const {
       for (size_t i = 0; i < s; i++) {
