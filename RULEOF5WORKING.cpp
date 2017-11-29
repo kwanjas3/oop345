@@ -33,6 +33,7 @@ public:
 	//X(){}
 	//X(){p = nullptr; s = 0}
 	X() : p(nullptr), s(0) { cout << "default" << endl; }
+	~X(){delete [] p;}
 	X(const T value, size_t size) {
 		s = size;
 		p = new T[size];
