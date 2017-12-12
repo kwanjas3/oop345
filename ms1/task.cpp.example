@@ -1,0 +1,90 @@
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Task{
+	string name, slots{"1"}, pass, fail;
+	public:
+	Task(){}
+	Task(vector<string>& line){
+		switch(line.size()){
+		case 4:
+			if (validateTask(line[3]))
+			fail = line[3];
+			else throw string("bad task");
+		case 3:
+			if (validateTask(line[2]))
+			pass = line[2];
+			else throw string("bad task");
+		case 2:
+			if (validSlots(line[1]))
+			slots = line[1];
+			else throw string("bad slots");
+		case 1:
+		if (validateTask(line[0]))
+			name = line[0];
+			else throw string("bad task");
+			break;
+		default:
+		throw string("bad line found ") + to_string(line.size()) + " field , expected 1,2,3, or 4\n";
+		}
+	}
+	void print(){
+		cout <<"name/slots/pass/fail = "<< name 
+		<<'/'<< slots 
+		<<'/'<< pass 
+		<<'/'<< fail << '\n';
+	}
+	bool validateTask(const string& ck){ // put this in utils
+	if (ck.empty())
+		return true;
+
+	for (auto chr : ck){
+		if(!isalnum(chr) || chr ==' '|| chr =='#')
+		return false;
+	}
+	return true;
+	}
+	bool validSlots(string& t){
+		if (t.empty())
+		return true;
+
+	for (auto chr : ck){
+		if(!isdigit(chr))
+		return false;
+	}
+	return true;
+	}
+}
+
+class TaskManager{
+	vector<Task> taskList;
+public:
+	TaskManager(vector<vector<string>> & csvTaskData){
+
+	for (auto &line : csvTaskData){
+	try{
+		taskList.push_back(Task(line));
+		} catch(const string& e){
+		cerr << "problem: " << e << endl;
+		}
+
+	}
+	}
+	void print() {
+		for (auto& t: taskList){
+		t.print();
+		}
+	}
+}
+
+
+int main(int argc, char** argv){
+	string filename = argv[1];
+	char sep = argv[2][0];
+	// ...
+
+}
