@@ -58,6 +58,23 @@ class Task{
 	}
 	return true;
 	}
+	void graph(fstream& dotfile){
+	if(pass.empty() && fail.empty(){
+	dotfile <<'"' <<name << '"'<< ";\n";
+	}
+	if(! pass.empty()){
+	dotfile << '"' << name << '"'
+	<<" -> "
+	<< '"' << pass << '"'
+	<< " [color=green];\n";
+	}
+	if(! fail.empty()){
+	dotfile << '"' << name << '"'
+	<<" -> "
+	<< '"' << fail << '"'
+	<< " [color=red];\n";
+	}
+	}
 }
 
 class TaskManager{
@@ -79,6 +96,18 @@ public:
 		t.print();
 		}
 	}
+	void graph(string&e){
+	string dotFilename = filename + ".gv";
+	fstream dotFile(dotFilename, ios::out | ios::trunc); // write new if already exists
+	if (dotfile.is_open()) {
+	dotfile << "digraph taskgraph {\n";
+	for (auto &t : taskList){
+		t.graph(dotfile);
+	}
+	dotfile << "}\n";
+	dotfile.close()
+	}
+	
 }
 
 
@@ -86,5 +115,16 @@ int main(int argc, char** argv){
 	string filename = argv[1];
 	char sep = argv[2][0];
 	// ...
+	TaskManager tm(csvTaskData) tm;
+	tm.print()
+	tm.graph(filename);
+}
 
+//graphviz program
+digraph for direction
+graph foo{
+A->B
+B->C color=red
+C--D
+B->D
 }
