@@ -1,0 +1,28 @@
+digraph Ordergraph {
+"Fardad Soleimanloo
+Dell Precision 3600" -> "item: CPU" [color=blue];
+"Fardad Soleimanloo
+Dell Precision 3600" -> "item: Memory" [color=blue];
+"Fardad Soleimanloo
+Dell Precision 3600" -> "item: Memory" [color=blue];
+"Joseph Hughes
+HP Z230" -> "item: CPU" [color=blue];
+"Joseph Hughes
+HP Z230" -> "item: Memory" [color=blue];
+"Chris Szalwinski
+HP Z350" -> "item: CPU" [color=blue];
+"Chris Szalwinski
+HP Z350" -> "item: Memory" [color=blue];
+"Chris Szalwinski
+HP Z350" -> "item: SSD" [color=blue];
+"Chris Szalwinski
+HP Z350" -> "item: GPU" [color=blue];
+"Elliott Coleshill
+HP Apollo 1000" -> "item: CPU" [color=blue];
+"Elliott Coleshill
+HP Apollo 1000" -> "item: MEMORY" [color=blue];
+"Elliott Coleshill
+HP Apollo 1000" -> "item: Power Supply" [color=blue];
+"Elliott Coleshill
+HP Apollo 1000" -> "item: GPU" [color=blue];
+}
