@@ -34,7 +34,31 @@ int main(int argc, char** argv) {
 	//exclusive OR XOR
 	decltype(A) op2 = A^B;
 	cout << "A^B= "; printBits(op2); cout << '-' << op2 << '\n';
+	//flip bits
+	decltype(A) op3 = ~B;
+	cout << "~B= "; printBits(op3); cout << '-' << ~B << '\n';
 
-	
+	//bit shifting
+	int abc = 8;
+	abc <<= 1;
+	cout << abc << endl;
+
+
+	for (int bit = 0; bit < 8; bit++) {
+		unsigned char  target = 0x80;
+		target >>= bit;
+		cout << "right shift unsigned 0x80 " << bit << " bits right =";
+		printBits(target);
+		cout << " target=" << (unsigned int)(target & 0xff) << "\n";
+	}
+	cout << "\n";
+
+	for (int bit = 0; bit < 8; bit++) {
+		char  target = 0x80;
+		target >>= bit;
+		cout << "right shift signed 0x80 " << bit << " bits right =";
+		printBits(target);
+		cout << " target=" << (int)(target) << "\n";
+	}
 
 }
