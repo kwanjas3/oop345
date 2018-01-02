@@ -201,5 +201,26 @@ void Aggregation()
   oxbow.AddDuck(evil);
 }
 
+int main(int argc, char*argv[])
+{
+  if(argc == 1) {
+    cerr << "Usage: " << argv[0] << " graphviz-dot-file-list\n";
+    return 1;
+  }
+
+  vector<string> dotLocations {
+    "/usr/bin/dot",                                       // default UNIX
+    "/usr/local/bin/dot",                                 // sometimes a UNIX package is installed in /usr/local
+    "C:/\"Program Files (x86)\"/Graphviz2.38/bin/dot.exe" // a known DOS location for graphviz 2.38 (current package as of Nov 25, 2017)
+  };
+
+  string dot;
+  for(auto& e: dotLocations) {
+    auto fileexist = [] (string file) {fstream f(file, ios::in); return f.is_open();};
+    if( fileexist(e) ) {
+      dot = move(e);
+      break;
+    }
+}
 
 */
